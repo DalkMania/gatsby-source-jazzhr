@@ -1,0 +1,36 @@
+{
+  "name": "gatsby-source-jazzhr",
+  "version": "1.0.0",
+  "description": "Gatsby source plugin for building websites using the JazzHR Recruitment Software as a data source.",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src/ --out-dir . --ignore src/__tests__",
+    "watch": "babel -w src/ --out-dir . --ignore src/__tests__",
+    "prepare": "cross-env NODE_ENV=production npm run build",
+    "test": "jest --testEnvironment jsdom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DalkMania/gatsby-source-jazzhr.git"
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "gatsby-source-plugin"
+  ],
+  "author": "Niklas Dahlqvist <dalkmania@gmail.com>",
+  "license": "0BSD",
+  "bugs": {
+    "url": "https://github.com/DalkMania/gatsby-source-jazzhr/issues"
+  },
+  "homepage": "https://github.com/DalkMania/gatsby-source-jazzhr#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
+    "babel-preset-gatsby-package": "^2.15.0",
+    "cross-env": "^7.0.3",
+    "jest": "^28.1.0",
+    "prettier": "^2.6.2"
+  }
+}
