@@ -25,7 +25,11 @@ export const getApiData = async ({ apiKey, verbose, typePrefix, page = 1 }) => {
     return fetch(apiKey, page)
         .then((res) => {
             entities = entities.concat(res.data);
-            return fetch(apiKey, page + 1);
+            if (res.data.length > 99) {
+                return fetch(apiKey, page + 1);
+            } else {
+                return entities;
+            }
         })
         .catch(() => {
             return entities;

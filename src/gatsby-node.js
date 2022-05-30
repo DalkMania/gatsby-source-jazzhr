@@ -1,9 +1,36 @@
 import { getApiData } from "./utils/fetch";
+import normalize from "./utils/normalize";
 
 const typePrefix = `jazzhr__`;
 
 export const createSchemaCustomization = async ({ actions }) => {
     const { createTypes } = actions;
+
+    const typeDefs = `
+        type jazzHr implements Node {
+            title: String
+            recruiter: String
+            board_code: String
+            department: String
+            hiring_lead: String
+            team_id: String
+            state: String
+            city: String
+            zip: String
+            description: String
+            minimum_salary: String
+            maximum_salary: String
+            type: String
+            notes: String
+            original_open_date: String
+            send_to_job_boards: String
+            internal_code: String
+            status: String
+            questionnaire: String
+        }
+    `;
+
+    createTypes(typeDefs);
 };
 
 export const sourceNodes = async (
@@ -17,4 +44,27 @@ export const sourceNodes = async (
         verboseOutput,
         typePrefix
     });
+
+    // Normalize data & create nodes
+    //
+    // Creates entities from object collections of entities
+    entities = normalize.normalizeEntities(entities);
+
+    // Standardizes ids & cleans keys
+    entities = normalize.standardizeKeys(entities);
+
+    // Converts to use only GMT dates
+    entities = normalize.standardizeDates(entities);
+
+    // creates Gatsby IDs for each entity
+    entities = normalize.createGatsbyIds(createNodeId, entities);
+
+    // creates nodes for each entry
+    normalize.createNodesFromEntities({
+        entities,
+        createNode,
+        createContentDigest
+    });
+
+    return;
 };
