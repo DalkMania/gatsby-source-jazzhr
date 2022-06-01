@@ -1,13 +1,14 @@
-import { getApiData } from "./utils/fetch";
-import normalize from "./utils/normalize";
+import { getApiData } from "./utils/fetch"
+import * as normalize from "./utils/normalize"
 
-const typePrefix = `jazzhr__`;
+const typePrefix = `jazzhr__`
 
 export const createSchemaCustomization = async ({ actions }) => {
-    const { createTypes } = actions;
+  const { createTypes } = actions
 
-    const typeDefs = `
+  const typeDefs = `
         type jazzHr implements Node {
+            jazzhr_id: String
             title: String
             recruiter: String
             board_code: String
@@ -28,43 +29,43 @@ export const createSchemaCustomization = async ({ actions }) => {
             status: String
             questionnaire: String
         }
-    `;
+    `
 
-    createTypes(typeDefs);
-};
+  createTypes(typeDefs)
+}
 
 export const sourceNodes = async (
-    { actions, getNode, store, cache, createNodeId, createContentDigest },
-    { apiKey, verboseOutput }
+  { actions, getNode, store, cache, createNodeId, createContentDigest },
+  { apiKey, verboseOutput }
 ) => {
-    const { createNode } = actions;
+  const { createNode } = actions
 
-    let entities = await getApiData({
-        apiKey,
-        verboseOutput,
-        typePrefix
-    });
+  let entities = await getApiData({
+    apiKey,
+    verboseOutput,
+    typePrefix,
+  })
 
-    // Normalize data & create nodes
-    //
-    // Creates entities from object collections of entities
-    entities = normalize.normalizeEntities(entities);
+  // Normalize data & create nodes
+  //
+  // Creates entities from object collections of entities
+  entities = normalize.normalizeEntities(entities)
 
-    // Standardizes ids & cleans keys
-    entities = normalize.standardizeKeys(entities);
+  // Standardizes ids & cleans keys
+  entities = normalize.standardizeKeys(entities)
 
-    // Converts to use only GMT dates
-    entities = normalize.standardizeDates(entities);
+  // Converts to use only GMT dates
+  entities = normalize.standardizeDates(entities)
 
-    // creates Gatsby IDs for each entity
-    entities = normalize.createGatsbyIds(createNodeId, entities);
+  // creates Gatsby IDs for each entity
+  entities = normalize.createGatsbyIds(createNodeId, entities)
 
-    // creates nodes for each entry
-    normalize.createNodesFromEntities({
-        entities,
-        createNode,
-        createContentDigest
-    });
+  // creates nodes for each entry
+  normalize.createNodesFromEntities({
+    entities,
+    createNode,
+    createContentDigest,
+  })
 
-    return;
-};
+  return
+}

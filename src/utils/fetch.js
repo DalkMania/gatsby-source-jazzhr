@@ -1,37 +1,27 @@
-import axios from "axios";
-import httpExceptionHandler from "./http-exception-handler";
+import axios from "axios"
+import httpExceptionHandler from "./http-exception-handler"
 
 /**
- * High-level function to coordinate fetching data from the JazzHR API.
+ * High-level recursive function to coordinate fetching data from the JazzHR API.
  */
-const fetch = (apiKey, page) => {
-    try {
-        const res = axios({
-            method: `get`,
-            url: `https://api.resumatorapi.com/v1/jobs/page/${page}?apikey=${apiKey}`
-        });
-        return res;
-    } catch (e) {
-        httpExceptionHandler(e);
+const fetch = async (apiKey, page) => {
+  const query = `https://api.resumatorapi.com/v1/jobs/page/${page}?apikey=${apiKey}`
+  try {
+    const response = await axios.get(query)
+    const data = response.data
+    if (data.length > 99) {
+      return data.concat(await fetch(apiKey, page + 1))
+    } else {
+      return data
     }
-};
+  } catch (e) {
+    httpExceptionHandler(e)
+  }
+}
 
 /**
- * Recursive function to coordinate fetching data from the JazzHR API.
+ * Function to coordinate fetching data from the JazzHR API.
  */
 export const getApiData = async ({ apiKey, verbose, typePrefix, page = 1 }) => {
-    let entities = [];
-
-    return fetch(apiKey, page)
-        .then((res) => {
-            entities = entities.concat(res.data);
-            if (res.data.length > 99) {
-                return fetch(apiKey, page + 1);
-            } else {
-                return entities;
-            }
-        })
-        .catch(() => {
-            return entities;
-        });
-};
+  return fetch(apiKey, page).then(data => data)
+}
