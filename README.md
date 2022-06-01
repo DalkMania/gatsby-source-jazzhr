@@ -22,17 +22,17 @@ yarn add gatsby-source-jazzhr
 ```javascript
 // In your gatsby-config.js
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-jazzhr",
-            options: {
-                apiKey: "YOUR_JAZZHR_API_KEY",
-                verboseOutput: false,
-                includeInDevelopment: false
-            }
-        }
-    ]
-};
+  plugins: [
+    {
+      resolve: "gatsby-source-jazzhr",
+      options: {
+        apiKey: "YOUR_JAZZHR_API_KEY",
+        subDomain: "YOUR_JAZZHR_SUBDOMAIN",
+        verboseOutput: false,
+      },
+    },
+  ],
+}
 ```
 
 Set verboseOutput to `true` to display a verbose output on `npm run develop` or `npm run build`. It can help you debug specific API Endpoints problems.
