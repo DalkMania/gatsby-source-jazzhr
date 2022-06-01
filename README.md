@@ -37,8 +37,37 @@ module.exports = {
 
 Set verboseOutput to `true` to display a verbose output on `npm run develop` or `npm run build`. It can help you debug specific API Endpoints problems.
 
-### GraphQL Query to get all jobs
+### GraphQL Query to get all open jobs
 
 ```graphql
-
+query JazzHRJobsQuery {
+  allJazzHr(filter: { status: { eq: "Open" } }) {
+    totalCount
+    nodes {
+      id
+      status
+      title
+      department
+      description
+      team_id
+      city
+      recruiter
+      customApplyUrl
+      applyUrl
+      board_code
+      country_id
+      hiring_lead
+      jazzhr_id
+      maximum_salary
+      minimum_salary
+      notes
+      original_open_date
+      questionnaire
+      send_to_job_boards
+      state
+      type
+      zip
+    }
+  }
+}
 ```
