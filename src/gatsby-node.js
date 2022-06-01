@@ -1,11 +1,10 @@
 import { getApiData } from "./utils/fetch"
 import * as normalize from "./utils/normalize"
 
-const typePrefix = `jazzhr__`
-
 export const createSchemaCustomization = async ({ actions }, { subDomain }) => {
   const { createFieldExtension, createTypes } = actions
 
+  // Create URL Fields
   createFieldExtension({
     name: "applyUrl",
     extend(options, prevFieldConfig) {
@@ -69,7 +68,6 @@ export const sourceNodes = async (
   let entities = await getApiData({
     apiKey,
     verboseOutput,
-    typePrefix,
   })
 
   // Normalize data & create nodes
