@@ -3,8 +3,32 @@ import * as normalize from "./utils/normalize"
 
 const typePrefix = `jazzhr__`
 
-export const createSchemaCustomization = async ({ actions }) => {
-  const { createTypes } = actions
+export const createSchemaCustomization = async ({ actions }, { subDomain }) => {
+  const { createFieldExtension, createTypes } = actions
+
+  createFieldExtension({
+    name: "applyUrl",
+    extend(options, prevFieldConfig) {
+      return {
+        resolve(source) {
+          return `${subDomain}/apply/jobs/details/${source.board_code}`
+        },
+      }
+    },
+  })
+
+  createFieldExtension({
+    name: "customApplyUrl",
+    extend(options, prevFieldConfig) {
+      return {
+        resolve(source) {
+          return `${subDomain}/apply/${source.board_code}/${normalize.slugify(
+            source.title
+          )}`
+        },
+      }
+    },
+  })
 
   const typeDefs = `
         type jazzHr implements Node {
@@ -28,6 +52,8 @@ export const createSchemaCustomization = async ({ actions }) => {
             internal_code: String
             status: String
             questionnaire: String
+            applyUrl: String @applyUrl
+            customApplyUrl: String @customApplyUrl
         }
     `
 

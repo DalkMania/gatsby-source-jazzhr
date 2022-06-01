@@ -129,7 +129,6 @@ export function standardizeDates(entities) {
 
 export function createGatsbyIds(createNodeId, entities) {
   return entities.map(e => {
-    e.jazzhr_id = e.id
     e.id = createNodeId(e.jazzhr_id.toString())
     return e
   })
@@ -153,4 +152,13 @@ export function createNodesFromEntities({
     }
     createNode(node)
   })
+}
+
+export function slugify(str) {
+  return str
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/[-\s]+/g, "-")
 }
