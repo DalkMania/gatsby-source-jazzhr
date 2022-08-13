@@ -1,14 +1,14 @@
 # gatsby-source-jazzhr
 
 Source plugin for pulling data into [Gatsby](https://github.com/gatsbyjs) from
-[JazzHR](https://www.jazzhr.com).
+[JazzHR](https://www.jazzhr.com). Heavily inspired by [gatsby-source-lever](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-source-lever).
 
 ## Install
 
 Using NPM
 
 ```shell
-npm install --save gatsby-source-jazzhr
+npm install gatsby-source-jazzhr
 ```
 
 Using Yarn
