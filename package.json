@@ -7,7 +7,7 @@
     "build": "babel src/ --out-dir . --ignore src/__tests__",
     "watch": "babel -w src/ --out-dir . --ignore src/__tests__",
     "prepare": "cross-env NODE_ENV=production npm run build",
-    "test": "jest --testEnvironment jsdom"
+    "test": "jest"
   },
   "repository": {
     "type": "git",

@@ -1,33 +1,35 @@
-import { getApiData } from "./utils/fetch";
-import * as normalize from "./utils/normalize";
+import { getApiData } from "./utils/fetch"
+import * as normalize from "./utils/normalize"
 
 export const createSchemaCustomization = async ({ actions }, { subDomain }) => {
-    const { createFieldExtension, createTypes } = actions;
+  const { createFieldExtension, createTypes } = actions
 
-    // Create URL Fields
-    createFieldExtension({
-        name: "apply_url",
-        extend(options, prevFieldConfig) {
-            return {
-                resolve(source) {
-                    return `${subDomain}/apply/jobs/details/${source.board_code}`;
-                }
-            };
-        }
-    });
+  // Create URL Fields
+  createFieldExtension({
+    name: "apply_url",
+    extend(options, prevFieldConfig) {
+      return {
+        resolve(source) {
+          return `${subDomain}/apply/jobs/details/${source.board_code}`
+        },
+      }
+    },
+  })
 
-    createFieldExtension({
-        name: "custom_apply_url",
-        extend(options, prevFieldConfig) {
-            return {
-                resolve(source) {
-                    return `${subDomain}/apply/${source.board_code}/${normalize.slugify(source.title)}`;
-                }
-            };
-        }
-    });
+  createFieldExtension({
+    name: "custom_apply_url",
+    extend(options, prevFieldConfig) {
+      return {
+        resolve(source) {
+          return `${subDomain}/apply/${source.board_code}/${normalize.slugify(
+            source.title
+          )}`
+        },
+      }
+    },
+  })
 
-    const typeDefs = `
+  const typeDefs = `
         type jazzHr implements Node {
             jazzhr_id: String
             title: String
@@ -52,42 +54,42 @@ export const createSchemaCustomization = async ({ actions }, { subDomain }) => {
             apply_url: String @apply_url
             custom_apply_url: String @custom_apply_url
         }
-    `;
+    `
 
-    createTypes(typeDefs);
-};
+  createTypes(typeDefs)
+}
 
 export const sourceNodes = async (
-    { actions, getNode, store, cache, createNodeId, createContentDigest },
-    { apiKey, verboseOutput }
+  { actions, getNode, store, cache, createNodeId, createContentDigest },
+  { apiKey, verboseOutput }
 ) => {
-    const { createNode } = actions;
+  const { createNode } = actions
 
-    let entities = await getApiData({
-        apiKey,
-        verboseOutput
-    });
+  let entities = await getApiData({
+    apiKey,
+    verboseOutput,
+  })
 
-    // Normalize data & create nodes
-    //
-    // Creates entities from object collections of entities
-    entities = normalize.normalizeEntities(entities);
+  // Normalize data & create nodes
+  //
+  // Creates entities from object collections of entities
+  entities = normalize.normalizeEntities(entities)
 
-    // Standardizes ids & cleans keys
-    entities = normalize.standardizeKeys(entities);
+  // Standardizes ids & cleans keys
+  entities = normalize.standardizeKeys(entities)
 
-    // Converts to use only GMT dates
-    entities = normalize.standardizeDates(entities);
+  // Converts to use only GMT dates
+  entities = normalize.standardizeDates(entities)
 
-    // creates Gatsby IDs for each entity
-    entities = normalize.createGatsbyIds(createNodeId, entities);
+  // creates Gatsby IDs for each entity
+  entities = normalize.createGatsbyIds(createNodeId, entities)
 
-    // creates nodes for each entry
-    normalize.createNodesFromEntities({
-        entities,
-        createNode,
-        createContentDigest
-    });
+  // creates nodes for each entry
+  normalize.createNodesFromEntities({
+    entities,
+    createNode,
+    createContentDigest,
+  })
 
-    return;
-};
+  return
+}
